@@ -1,4 +1,4 @@
-// In eclips, class name and file name must be the same.
+// In eclipse, class name and file name must be the same.
 // Each class has a separate file.
 
 public class enumerate {
@@ -6,20 +6,20 @@ public class enumerate {
     // all runs start at "main"
     public static void main(String[] args) {
         enumerateSubsets(5);
-        enumerateCombinations(2, 5);
-        enumerate5Permutations();
+        //enumerateCombinations(2, 5);
+        //enumerate5Permutations();
     }
 
 
-    // enumerate all subsets of the set { 1, 2, ..., n }, where n < 32.
+    // enumerate all subsets of the set { 1, 2, ..., n }, where n < 64.
     public static void enumerateSubsets (int n) {   
-         // Pre: n < 32
+         // Pre: n < 64
          System.out.println("All subsets of " + n + " numbers:"); 
-         for (int x = 0; x < (1 << n); x++) {
+         for (int x = 0; x < (1L << n); x++) {
              System.out.print("{"); 
-             for (int j = 1; j <= n; j++)
-		 if ((x & (1 << (j-1))) != 0) 
-		     System.out.print(j + ", ");
+             for (int j = 1; j <= n; j++) {
+            	 if ((x & (1L << (j-1))) != 0) System.out.print(j + ", ");
+             }
              System.out.print("}\n"); 
          }
     }
