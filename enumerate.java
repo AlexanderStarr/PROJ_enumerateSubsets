@@ -44,15 +44,28 @@ public class enumerate {
         }
     }
 
+    // Recursively find the next k-combination of x.
+    // Takes an index j in addition to all the other arguments nextCombination takes.
+    static boolean rNextCombo (int x[], int k, int n, int j) {
+    	if (j < 0) return false;
+    	// If the element is under that index's maximum, increment it and 'reset' all following elements.
+    	if (x[j] <= (n - k + j)) {
+    		x[j]++;
+    		for (int i = 1; i < k - j; i++) x[i+j] = x[j]+i;
+    		return true;
+    	}
+    	// Otherwise, if the element is at its maximum, then check the proceeding index.
+    	else {
+    		return rNextCombo(x, k, n, j-1);
+    	}
+    }
+
     // modify the array x to generate the next k-combination from x.
     // In general, the first k-combination of n elements is { 1, 2, ..., k } 
     // and the last k-combination is { n-k+1, n-k+2, ..., n }.
     public static boolean nextCombination (int x[], int k, int n) {
-        for (int j = k-1; j >= 0; j--) if (x[j] <= (n - k + j)) {
-             x[j]++;  
-             for (int i = 1; i < k - j;  i++) x[i+j] = x[j]+i;
-             return true; }
-        return false;
+    	// j starts at k-1
+    	return rNextCombo(x, k, n, k-1);
     }
 
     // This is an awkward method to print all 5! permutations of 5 elements.
