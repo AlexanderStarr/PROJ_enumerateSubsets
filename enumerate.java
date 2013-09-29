@@ -67,6 +67,39 @@ public class enumerate {
     	// j starts at k-1
     	return rNextCombo(x, k, n, k-1);
     }
+    
+    
+    // Helper function for nextPermutation, reverses the list x from indices l to r.
+    static void reverse(int x[], int l, int r) {
+    	while (l < r) {
+    		int temp = x[l];
+    		x[l] = x[r];
+    		x[r] = temp;
+    		l += 1;
+    		r -= 1;
+    	}
+    }
+    
+    
+    public static boolean nextPermutation (int x[], int n) {
+    	int k = -1;
+    	for (int i = n-2; i >= 0; i--) {
+    		if (x[i] < x[i+1]) {
+    			k = i;
+    			break;
+    		}
+    	}
+    	if (k < 0) return false;
+   		for (int l = n-1; l > k; l--) {
+    		if (x[k] < x[l]) {
+    			int temp = x[k];
+    			x[k] = x[l];
+    			x[l] = temp;
+    			reverse(x, k+1, n-1);
+    		}
+    	}
+    	return true;
+    }
 
     // This is an awkward method to print all 5! permutations of 5 elements.
     public static void enumerate5Permutations () {   
