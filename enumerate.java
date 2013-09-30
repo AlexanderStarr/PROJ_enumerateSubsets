@@ -6,8 +6,9 @@ public class enumerate {
     // all runs start at "main"
     public static void main(String[] args) {
         enumerateSubsets(5);
-        //enumerateCombinations(2, 5);
-        //enumerate5Permutations();
+        enumerateCombinations(3, 5);
+        enumerate5Permutations();
+    	//enumeratePermutations(5);  // New and improved permutation enumeration function.
     }
 
 
@@ -15,8 +16,11 @@ public class enumerate {
     public static void enumerateSubsets (int n) {   
          // Pre: n < 64
          System.out.println("All subsets of " + n + " numbers:"); 
+         // x runs from 0 to 2^n (the number of subsets of the set { 1, 2, ..., n }
          for (int x = 0; x < (1L << n); x++) {
              System.out.print("{"); 
+             // The bit representation of x corresponds to a subset
+             // The index of each 1-bit in x is a member of the subset, iterate through and find them.
              for (int j = 1; j <= n; j++) {
             	 if ((x & (1L << (j-1))) != 0) System.out.print(j + ", ");
              }
@@ -36,14 +40,25 @@ public class enumerate {
     // print all k-combinations of n elements.
     public static void enumerateCombinations (int k, int n) {   
         int x[] = new int[100];    // k <= 100
-	System.out.println("All " + k + "-combinations of " + n + " numbers:"); 
+        System.out.println("All " + k + "-combinations of " + n + " numbers:"); 
+        // Set the array values to each position's minimum.
         for (int j = 0; j < k; j++) x[j] = j+1;
         while (true) {
              printArray(x, k);
              if (nextCombination(x, k, n) == false) break;
         }
     }
-
+    
+    
+    // modify the array x to generate the next k-combination from x.
+    // In general, the first k-combination of n elements is { 1, 2, ..., k } 
+    // and the last k-combination is { n-k+1, n-k+2, ..., n }.
+    public static boolean nextCombination (int x[], int k, int n) {
+    	// j starts at k-1
+    	return rNextCombo(x, k, n, k-1);
+    }
+    
+    
     // Recursively find the next k-combination of x.
     // Takes an index j in addition to all the other arguments nextCombination takes.
     static boolean rNextCombo (int x[], int k, int n, int j) {
@@ -60,16 +75,8 @@ public class enumerate {
     	}
     }
 
-    // modify the array x to generate the next k-combination from x.
-    // In general, the first k-combination of n elements is { 1, 2, ..., k } 
-    // and the last k-combination is { n-k+1, n-k+2, ..., n }.
-    public static boolean nextCombination (int x[], int k, int n) {
-    	// j starts at k-1
-    	return rNextCombo(x, k, n, k-1);
-    }
     
-    
-    // Helper function for nextPermutation, reverses the list x from indices l to r.
+    // Helper function for nextPermutation, reverses the portion of list x from indices l to r.
     static void reverse(int x[], int l, int r) {
     	while (l < r) {
     		int temp = x[l];
@@ -81,6 +88,9 @@ public class enumerate {
     }
     
     
+    // Modifies the array x to generate the next permutation.
+    // Permutations follow lexicographical ordering, starting at { 1, 2, ..., n }
+    // and ending at { n, n-1, ..., 1 } (i.e. the order they would appear in a dictionary).
     public static boolean nextPermutation (int x[], int n) {
     	int k = -1;
     	for (int i = n-2; i >= 0; i--) {
@@ -96,9 +106,23 @@ public class enumerate {
     			x[k] = x[l];
     			x[l] = temp;
     			reverse(x, k+1, n-1);
+    			break;
     		}
     	}
     	return true;
+    }
+    
+    
+    // Lists all permutations of the set {1, 2, ..., n}
+    public static void enumeratePermutations(int n) {
+    	int x[] = new int[100];
+    	for (int i=0; i < n; i++) x[i] = i+1;
+    	System.out.println("All combinations of the sequence from 1 to " + n + ":");
+    	boolean morePerms = true;
+    	while (morePerms) {
+    		printArray(x, n);
+    		morePerms = nextPermutation(x, n);
+    	}
     }
 
     // This is an awkward method to print all 5! permutations of 5 elements.
